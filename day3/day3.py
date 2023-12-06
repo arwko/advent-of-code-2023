@@ -1,18 +1,12 @@
-import regex as re
+import re
 
 
 def part_one():
     sum_numbers = 0
     with open("input") as file:
         # Find symbols used
-        symbols = set(re.findall(r"[^\.^\d^\n]", file.read()))
-        sym_pattern = r"["
-        for s in symbols:
-            sym_pattern += s + r"|"
-        sym_pattern = sym_pattern[:-1] + r"]+"
 
         # Read all lines in input
-        file.seek(0, 0)
         lines = file.read().splitlines()
         cols = len(lines[1])
         # Add frame with '.' around original input to avoid boundary checks
@@ -22,19 +16,14 @@ def part_one():
             input_expanded.append("." + s + ".")
         input_expanded.append("." * (cols + 2))
 
-        for i in range(len(input_expanded)):
-            matches = re.finditer(r"\d+", input_expanded[i])
+        for r, lines in enumerate(input_expanded):
+            print(f"{r} : {lines}")
+            matches = re.finditer(r"\d+", lines)
             for m in matches:
-                if (
-                    re.search(
-                        sym_pattern, input_expanded[i - 1][m.start() - 1 : m.end() + 1]
-                    )
-                    or re.search(
-                        sym_pattern, input_expanded[i + 1][m.start() - 1 : m.end() + 1]
-                    )
-                    or re.match(sym_pattern, input_expanded[i][m.start() - 1])
-                    or re.match(sym_pattern, input_expanded[i][m.end()])
-                ):
+                search_space = ""
+                for row in range(r-1,r+2):
+                    search_space += input_expanded[row][m.start() -1:m.end() +1]
+                if re.search(r"[^\.^\d^\n]", search_space):
                     sum_numbers += int(m.group())
 
     print(sum_numbers)
@@ -64,4 +53,4 @@ def test_method():
 
 
 if __name__ == "__main__":
-    symbols = part_two()
+    symbols = part_one()
