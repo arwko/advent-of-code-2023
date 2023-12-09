@@ -21,8 +21,8 @@ def part_one():
             matches = re.finditer(r"\d+", lines)
             for m in matches:
                 search_space = ""
-                for row in range(r-1,r+2):
-                    search_space += input_expanded[row][m.start() -1:m.end() +1]
+                for row in range(r - 1, r + 2):
+                    search_space += input_expanded[row][m.start() - 1 : m.end() + 1]
                 if re.search(r"[^\.^\d^\n]", search_space):
                     sum_numbers += int(m.group())
 
