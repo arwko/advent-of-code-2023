@@ -4,11 +4,16 @@ from collections import Counter
 def value(hand : str, replace_joker: bool) -> int:
     c = Counter(hand)
     if replace_joker:
-        if c['J'] > 0 and c['J'] < 5 and c.most_common()[0][0] != 'J':
-            # Increase the card with highest count
-            c[c.most_common()[0][0]] += c['J']
-            del c['J']
-    
+        if c['J'] > 0 and c['J'] < 5:
+            if c.most_common()[0][0] != 'J':
+                # Increase the card with highest count
+                c[c.most_common()[0][0]] += c['J']
+                del c['J']
+            else:
+                # Increase second highest count
+                c[c.most_common()[1][0]] += c['J']
+                del c['J']
+            
     match c.most_common()[0][1]:
         case 1:
             # Only high card
@@ -65,8 +70,8 @@ def calculate_total_score(df : pd.DataFrame, repl_j: bool):
 if __name__ == '__main__':
     df = read_data('input')
     # Part one
-    calculate_total_score(df, False)
+    #calculate_total_score(df, False)
     
     # Part two
-    #calculate_total_score(df, True)
+    calculate_total_score(df, True)
 
